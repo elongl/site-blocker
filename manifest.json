@@ -1,0 +1,24 @@
+{
+  "manifest_version": 3,
+  "name": "Site Blocker",
+  "version": "1.0",
+  "description": "Automatically block websites",
+  "icons": {
+    "16": "images/icon-16.jpg",
+    "32": "images/icon-32.jpg",
+    "48": "images/icon-48.jpg",
+    "128": "images/icon-128.jpg"
+  },
+  "content_scripts": [
+    {
+      "js": ["src/content.js"],
+      "matches": ["https://*/*"]
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["static/*"],
+      "matches": ["https://*/*"]
+    }
+  ]
+}
