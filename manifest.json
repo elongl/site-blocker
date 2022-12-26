@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Site Blocker",
   "version": "1.0",
-  "description": "Automatically block websites",
+  "description": "Block websites",
   "icons": {
     "16": "images/icon-16.jpg",
     "32": "images/icon-32.jpg",
@@ -20,5 +20,6 @@
       "resources": ["static/*"],
       "matches": ["https://*/*"]
     }
-  ]
+  ],
+  "permissions": ["storage"]
 }
