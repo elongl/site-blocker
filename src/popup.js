@@ -6,15 +6,19 @@ const getCurrentTab = async () => {
     active: true,
     lastFocusedWindow: true,
   });
-  return new URL(tab.url);
+  return tab;
 };
 
 const blockSite = async () => {
   const currentTab = await getCurrentTab();
+  const currentTabURL = new URL(currentTab.url);
   let { blockedSites } = await chrome.storage.sync.get({ blockedSites: [] });
-  blockedSites = [...blockedSites, currentTab.host];
+  blockedSites = [...blockedSites, currentTabURL.host];
   await chrome.storage.sync.set({ blockedSites });
   blockSuccessLabel.style.display = "block";
+  await chrome.tabs.update(currentTab.id, {
+    url: chrome.runtime.getURL(`static/blocked.html?url=${currentTabURL.href}`),
+  });
 };
 
 blockButton.addEventListener("click", blockSite);
