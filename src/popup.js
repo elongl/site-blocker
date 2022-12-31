@@ -2,7 +2,10 @@ const blockButton = document.getElementById("block-button");
 const blockSuccessLabel = document.getElementById("block-success");
 
 const getCurrentTab = async () => {
-  const [tab] = await chrome.tabs.query({ active: true });
+  const [tab] = await chrome.tabs.query({
+    active: true,
+    lastFocusedWindow: true,
+  });
   return new URL(tab.url);
 };
 
