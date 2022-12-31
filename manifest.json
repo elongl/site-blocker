@@ -4,10 +4,14 @@
   "version": "1.0",
   "description": "Block websites",
   "icons": {
-    "16": "images/icon-16.jpg",
-    "32": "images/icon-32.jpg",
-    "48": "images/icon-48.jpg",
-    "128": "images/icon-128.jpg"
+    "16": "static/images/icon-16.jpg",
+    "32": "static/images/icon-32.jpg",
+    "48": "static/images/icon-48.jpg",
+    "128": "static/images/icon-128.jpg"
+  },
+  "action": {
+    "default_popup": "static/popup.html",
+    "default_icon": "static/images/icon-128.jpg"
   },
   "content_scripts": [
     {
@@ -21,5 +25,5 @@
       "matches": ["https://*/*"]
     }
   ],
-  "permissions": ["storage"]
+  "permissions": ["storage", "tabs"]
 }

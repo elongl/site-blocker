@@ -1,12 +1,10 @@
-const blockSite = async (host) => {
-  const blockedSites = (await chrome.storage.sync.get("blockedSites")) || [];
-  await chrome.storage.sync.set({
-    blockedSites: [...blockedSites, host],
-  });
-  console.log(`Successfully added "${host}" to blocked sites.`);
+const main = async () => {
+  const { blockedSites } = await chrome.storage.sync.get({ blockedSites: [] });
+  if (blockedSites.includes(location.host)) {
+    window.location.href = chrome.runtime.getURL(
+      `static/blocked.html?url=${location.href}`
+    );
+  }
 };
 
-if (blockedSites.includes(location.host)) {
-  const blockedPageURL = chrome.runtime.getURL("static/blocked.html");
-  window.location.href = blockedPageURL;
-}
+main();
