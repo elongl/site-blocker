@@ -1,5 +1,3 @@
-const unblockButton = document.getElementById("unblock-button");
-
 const unblockSite = async () => {
   let { blockedSites } = await chrome.storage.sync.get({ blockedSites: [] });
   const urlParams = new URLSearchParams(location.search);
@@ -11,4 +9,5 @@ const unblockSite = async () => {
   window.location.href = currentBlockedSiteURL.href;
 };
 
+const unblockButton = document.getElementById("unblock-button");
 unblockButton.addEventListener("click", unblockSite);

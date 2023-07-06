@@ -1,6 +1,3 @@
-const blockButton = document.getElementById("block-button");
-const blockSuccessLabel = document.getElementById("block-success");
-
 const getCurrentTab = async () => {
   const [tab] = await chrome.tabs.query({
     active: true,
@@ -12,6 +9,7 @@ const getCurrentTab = async () => {
 const blockSite = async () => {
   const currentTab = await getCurrentTab();
   const currentTabURL = new URL(currentTab.url);
+  const blockSuccessLabel = document.getElementById("block-success");
   let { blockedSites } = await chrome.storage.sync.get({ blockedSites: [] });
   blockedSites = [...blockedSites, currentTabURL.host];
   await chrome.storage.sync.set({ blockedSites });
@@ -21,4 +19,5 @@ const blockSite = async () => {
   });
 };
 
+const blockButton = document.getElementById("block-button");
 blockButton.addEventListener("click", blockSite);
