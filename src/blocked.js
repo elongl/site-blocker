@@ -3,7 +3,7 @@ const unblockSite = async () => {
   const urlParams = new URLSearchParams(location.search);
   const currentBlockedSiteURL = new URL(urlParams.get("url"));
   blockedSites = blockedSites.filter(
-    (site) => site !== currentBlockedSiteURL.host
+    (site) => site.host !== currentBlockedSiteURL.host
   );
   await chrome.storage.sync.set({ blockedSites });
   window.location.href = currentBlockedSiteURL.href;
