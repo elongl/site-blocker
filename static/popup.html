@@ -1,5 +1,16 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <style>
+      body { min-width: 280px; padding: 10px; font-family: system-ui, sans-serif; }
+      h2 { margin-top: 0; }
+      hr { margin: 15px 0; border: none; border-top: 1px solid #ccc; }
+      #blocked-list { list-style: none; padding: 0; margin: 0; }
+      #blocked-list li { display: flex; justify-content: space-between; align-items: center; padding: 4px 0; }
+      #blocked-list button { margin-left: 10px; cursor: pointer; }
+      .empty-message { color: #666; font-style: italic; }
+    </style>
+  </head>
   <body>
     <div>
       <h2>Block website</h2>
@@ -13,8 +24,11 @@
       <button id="block-button">Block</button>
       <p id="block-success" style="display: none">Successfully blocked site.</p>
     </div>
-  </body>
-  <head>
+    <hr />
+    <div>
+      <h2>Blocked sites</h2>
+      <ul id="blocked-list"></ul>
+    </div>
     <script src="/src/popup.js"></script>
-  </head>
+  </body>
 </html>

@@ -16,13 +16,13 @@
   "content_scripts": [
     {
       "js": ["src/content.js"],
-      "matches": ["https://*/*"]
+      "matches": ["https://*/*", "http://*/*"]
     }
   ],
   "web_accessible_resources": [
     {
       "resources": ["static/*"],
-      "matches": ["https://*/*"]
+      "matches": ["https://*/*", "http://*/*"]
     }
   ],
   "permissions": ["storage", "tabs"]
