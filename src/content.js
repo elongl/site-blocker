@@ -1,7 +1,16 @@
 const main = async () => {
-  const { blockedSites } = await chrome.storage.sync.get({ blockedSites: [] });
+  const [{ blockedSites }, { oneTimeUnblocked }] = await Promise.all([
+    chrome.storage.sync.get({ blockedSites: [] }),
+    chrome.storage.local.get({ oneTimeUnblocked: [] }),
+  ]);
   const currentHost = location.host;
   const currentTime = Date.now();
+
+  if (oneTimeUnblocked.includes(currentHost)) {
+    const updatedOneTimeUnblocked = oneTimeUnblocked.filter((host) => host !== currentHost);
+    await chrome.storage.local.set({ oneTimeUnblocked: updatedOneTimeUnblocked });
+    return;
+  }
 
   const isBlocked = blockedSites.some((site) => {
     if (site.host === currentHost) {
