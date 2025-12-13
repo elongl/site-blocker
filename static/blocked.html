@@ -1,14 +1,157 @@
 <!DOCTYPE html>
 <html>
-  <body>
-    <div>
-      <h1>This site is blocked.</h1>
-      <p><strong id="blocked-site-name"></strong></p>
-      <button id="unblock-once-button">Unblock one-time</button>
-      <button id="unblock-button">Unblock</button>
-    </div>
-  </body>
   <head>
-    <script src="/src/blocked.js"></script>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif;
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #e8e8e8;
+      }
+      .container {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 24px;
+        padding: 48px;
+        text-align: center;
+        max-width: 420px;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      }
+      h1 {
+        font-size: 1.8rem;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: #ff6b6b;
+      }
+      #blocked-site-name {
+        font-size: 1.1rem;
+        color: #a0a0a0;
+        margin-bottom: 32px;
+        display: block;
+      }
+      .section {
+        margin-bottom: 24px;
+        padding-bottom: 24px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      .section:last-child {
+        margin-bottom: 0;
+        padding-bottom: 0;
+        border-bottom: none;
+      }
+      .section-label {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: #6b6b8d;
+        margin-bottom: 12px;
+      }
+      .duration-options {
+        display: flex;
+        gap: 8px;
+        justify-content: center;
+        margin-bottom: 12px;
+        flex-wrap: wrap;
+      }
+      .duration-btn {
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        color: #e8e8e8;
+        padding: 8px 16px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        transition: all 0.2s;
+      }
+      .duration-btn:hover {
+        background: rgba(255, 255, 255, 0.15);
+      }
+      .duration-btn.selected {
+        background: #4ecdc4;
+        border-color: #4ecdc4;
+        color: #1a1a2e;
+        font-weight: 600;
+      }
+      button {
+        font-family: inherit;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .action-btn {
+        width: 100%;
+        padding: 14px 24px;
+        border-radius: 12px;
+        font-size: 1rem;
+        font-weight: 500;
+        border: none;
+      }
+      #temp-unblock-button {
+        background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
+        color: #1a1a2e;
+      }
+      #temp-unblock-button:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(78, 205, 196, 0.3);
+      }
+      #temp-unblock-button:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+      .secondary-actions {
+        display: flex;
+        gap: 12px;
+      }
+      .secondary-btn {
+        flex: 1;
+        background: transparent;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: #a0a0a0;
+        padding: 12px 16px;
+        border-radius: 10px;
+        font-size: 0.9rem;
+      }
+      .secondary-btn:hover:not(:disabled) {
+        background: rgba(255, 255, 255, 0.08);
+        color: #e8e8e8;
+      }
+      .secondary-btn:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+      }
+    </style>
   </head>
+  <body>
+    <div class="container">
+      <h1>This site is blocked</h1>
+      <strong id="blocked-site-name"></strong>
+
+      <div class="section">
+        <div class="section-label">Temporarily unblock for</div>
+        <div class="duration-options">
+          <button class="duration-btn" data-minutes="5">5 min</button>
+          <button class="duration-btn" data-minutes="15">15 min</button>
+          <button class="duration-btn selected" data-minutes="30">30 min</button>
+          <button class="duration-btn" data-minutes="60">1 hour</button>
+        </div>
+        <button id="temp-unblock-button" class="action-btn">Temporarily Unblock</button>
+      </div>
+
+      <div class="section">
+        <div class="secondary-actions">
+          <button id="unblock-once-button" class="secondary-btn">View once</button>
+          <button id="unblock-button" class="secondary-btn">Unblock forever</button>
+        </div>
+      </div>
+    </div>
+    <script src="/src/blocked.js"></script>
+  </body>
 </html>

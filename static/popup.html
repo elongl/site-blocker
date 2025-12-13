@@ -2,32 +2,115 @@
 <html>
   <head>
     <style>
-      body { min-width: 280px; padding: 10px; font-family: system-ui, sans-serif; }
-      h2 { margin-top: 0; }
-      hr { margin: 15px 0; border: none; border-top: 1px solid #ccc; }
-      #blocked-list { list-style: none; padding: 0; margin: 0; }
-      #blocked-list li { display: flex; justify-content: space-between; align-items: center; padding: 4px 0; }
-      #blocked-list button { margin-left: 10px; cursor: pointer; }
-      .empty-message { color: #666; font-style: italic; }
+      * { box-sizing: border-box; }
+      body {
+        min-width: 300px;
+        padding: 16px;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        font-size: 13px;
+        color: #1a1a1a;
+        background: #fafafa;
+        margin: 0;
+      }
+      h2 {
+        margin: 0 0 12px 0;
+        font-size: 15px;
+        font-weight: 600;
+      }
+      h3 {
+        margin: 0 0 8px 0;
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: #666;
+      }
+      .divider {
+        height: 1px;
+        background: #e0e0e0;
+        margin: 14px 0;
+      }
+      ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+      ul li {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 6px 0;
+        border-bottom: 1px solid #eee;
+      }
+      ul li:last-child { border-bottom: none; }
+      ul li span {
+        flex: 1;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      button {
+        font-family: inherit;
+        font-size: 12px;
+        cursor: pointer;
+        border: none;
+        border-radius: 6px;
+        padding: 6px 12px;
+        transition: background 0.15s;
+      }
+      #block-button {
+        width: 100%;
+        background: #e53935;
+        color: white;
+        font-weight: 500;
+        padding: 10px 16px;
+      }
+      #block-button:hover { background: #c62828; }
+      ul button {
+        background: #eee;
+        color: #444;
+        padding: 4px 10px;
+        margin-left: 8px;
+        flex-shrink: 0;
+      }
+      ul button:hover { background: #ddd; }
+      #block-success {
+        display: none;
+        margin: 10px 0 0 0;
+        padding: 8px 10px;
+        background: #e8f5e9;
+        color: #2e7d32;
+        border-radius: 6px;
+        font-size: 12px;
+      }
+      .empty-message {
+        color: #888;
+        font-style: italic;
+        padding: 4px 0;
+      }
+      .temp-unblock-time {
+        color: #00897b;
+        font-size: 11px;
+        font-weight: 500;
+        margin-left: 6px;
+      }
     </style>
   </head>
   <body>
     <div>
       <h2>Block website</h2>
-      <label for="block-duration">Block duration (minutes):</label>
-      <input
-        type="number"
-        id="block-duration"
-        min="0"
-        placeholder="0 for permanent"
-      />
-      <button id="block-button">Block</button>
-      <p id="block-success" style="display: none">Successfully blocked site.</p>
+      <button id="block-button">Block current site</button>
+      <p id="block-success">Successfully blocked site.</p>
     </div>
-    <hr />
+    <div class="divider"></div>
     <div>
-      <h2>Blocked sites</h2>
+      <h3>Blocked sites</h3>
       <ul id="blocked-list"></ul>
+    </div>
+    <div id="temp-unblocked-section" style="display: none;">
+      <div class="divider"></div>
+      <h3>Temporarily unblocked</h3>
+      <ul id="temp-unblocked-list"></ul>
     </div>
     <script src="/src/popup.js"></script>
   </body>

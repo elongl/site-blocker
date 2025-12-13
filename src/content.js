@@ -1,7 +1,8 @@
 const main = async () => {
-  const [{ blockedSites }, { oneTimeUnblocked }] = await Promise.all([
+  const [{ blockedSites }, { oneTimeUnblocked }, { temporarilyUnblocked }] = await Promise.all([
     chrome.storage.sync.get({ blockedSites: [] }),
     chrome.storage.local.get({ oneTimeUnblocked: [] }),
+    chrome.storage.local.get({ temporarilyUnblocked: [] }),
   ]);
   const currentHost = location.host;
   const currentTime = Date.now();
@@ -12,14 +13,17 @@ const main = async () => {
     return;
   }
 
-  const blockEntry = blockedSites.find((site) => site.host === currentHost);
-  if (!blockEntry) {
-    return;
+  const tempUnblockEntry = temporarilyUnblocked.find((entry) => entry.host === currentHost);
+  if (tempUnblockEntry) {
+    if (tempUnblockEntry.expiresAt > currentTime) {
+      return;
+    }
+    const updatedTempUnblocked = temporarilyUnblocked.filter((entry) => entry.host !== currentHost);
+    await chrome.storage.local.set({ temporarilyUnblocked: updatedTempUnblocked });
   }
 
-  if (blockEntry.unblockAt && blockEntry.unblockAt <= currentTime) {
-    const updatedBlockedSites = blockedSites.filter((site) => site.host !== currentHost);
-    await chrome.storage.sync.set({ blockedSites: updatedBlockedSites });
+  const blockEntry = blockedSites.find((site) => site.host === currentHost);
+  if (!blockEntry) {
     return;
   }
 
