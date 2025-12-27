@@ -168,8 +168,12 @@ const confirmChallenge = () => {
     return;
   }
 
-  hideChallenge();
-  if (pendingAction) pendingAction();
+  const action = pendingAction;
+  if (action) {
+    document.getElementById("challenge-confirm").disabled = true;
+    document.getElementById("challenge-confirm").textContent = "Redirecting...";
+    action();
+  }
 };
 
 displayBlockedSite();
@@ -201,6 +205,9 @@ document.getElementById("challenge-input").addEventListener("keydown", (e) => {
 document
   .getElementById("challenge-input")
   .addEventListener("paste", (e) => e.preventDefault());
+document
+  .getElementById("challenge-input")
+  .addEventListener("drop", (e) => e.preventDefault());
 document.getElementById("challenge-overlay").addEventListener("click", (e) => {
   if (e.target === e.currentTarget) hideChallenge();
 });
