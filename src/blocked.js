@@ -181,7 +181,7 @@ document
   .addEventListener("click", () => showChallenge(temporarilyUnblockSite));
 document
   .getElementById("unblock-once-button")
-  .addEventListener("click", () => showChallenge(unblockSiteOnce));
+  .addEventListener("click", unblockSiteOnce);
 document
   .getElementById("unblock-button")
   .addEventListener("click", () => showChallenge(unblockSite));
