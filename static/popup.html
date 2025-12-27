@@ -1,8 +1,10 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
     <style>
-      * { box-sizing: border-box; }
+      * {
+        box-sizing: border-box;
+      }
       body {
         min-width: 300px;
         padding: 16px;
@@ -42,7 +44,9 @@
         padding: 6px 0;
         border-bottom: 1px solid #eee;
       }
-      ul li:last-child { border-bottom: none; }
+      ul li:last-child {
+        border-bottom: none;
+      }
       ul li span {
         flex: 1;
         overflow: hidden;
@@ -65,7 +69,9 @@
         font-weight: 500;
         padding: 10px 16px;
       }
-      #block-button:hover { background: #c62828; }
+      #block-button:hover {
+        background: #c62828;
+      }
       ul button {
         background: #eee;
         color: #444;
@@ -73,7 +79,9 @@
         margin-left: 8px;
         flex-shrink: 0;
       }
-      ul button:hover { background: #ddd; }
+      ul button:hover {
+        background: #ddd;
+      }
       #block-success {
         display: none;
         margin: 10px 0 0 0;
@@ -107,7 +115,7 @@
       <h3>Blocked sites</h3>
       <ul id="blocked-list"></ul>
     </div>
-    <div id="temp-unblocked-section" style="display: none;">
+    <div id="temp-unblocked-section" style="display: none">
       <div class="divider"></div>
       <h3>Temporarily unblocked</h3>
       <ul id="temp-unblocked-list"></ul>

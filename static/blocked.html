@@ -1,7 +1,7 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <style>
       * {
         box-sizing: border-box;
@@ -9,8 +9,17 @@
         padding: 0;
       }
       body {
-        font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif;
-        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+        font-family:
+          "SF Pro Display",
+          -apple-system,
+          BlinkMacSystemFont,
+          sans-serif;
+        background: linear-gradient(
+          135deg,
+          #1a1a2e 0%,
+          #16213e 50%,
+          #0f3460 100%
+        );
         min-height: 100vh;
         display: flex;
         align-items: center;
@@ -216,9 +225,18 @@
         animation: shake 0.4s ease-out;
       }
       @keyframes shake {
-        0%, 100% { transform: translateX(0); }
-        20%, 60% { transform: translateX(-6px); }
-        40%, 80% { transform: translateX(6px); }
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+        20%,
+        60% {
+          transform: translateX(-6px);
+        }
+        40%,
+        80% {
+          transform: translateX(6px);
+        }
       }
       .challenge-buttons {
         display: flex;
@@ -264,16 +282,24 @@
         <div class="duration-options">
           <button class="duration-btn" data-minutes="5">5 min</button>
           <button class="duration-btn" data-minutes="15">15 min</button>
-          <button class="duration-btn selected" data-minutes="30">30 min</button>
+          <button class="duration-btn selected" data-minutes="30">
+            30 min
+          </button>
           <button class="duration-btn" data-minutes="60">1 hour</button>
         </div>
-        <button id="temp-unblock-button" class="action-btn">Temporarily Unblock</button>
+        <button id="temp-unblock-button" class="action-btn">
+          Temporarily Unblock
+        </button>
       </div>
 
       <div class="section">
         <div class="secondary-actions">
-          <button id="unblock-once-button" class="secondary-btn">View once</button>
-          <button id="unblock-button" class="secondary-btn">Unblock forever</button>
+          <button id="unblock-once-button" class="secondary-btn">
+            View once
+          </button>
+          <button id="unblock-button" class="secondary-btn">
+            Unblock forever
+          </button>
         </div>
       </div>
     </div>
@@ -286,10 +312,25 @@
         </div>
         <p class="challenge-text">To proceed, type the phrase below:</p>
         <div class="challenge-phrase" id="challenge-phrase"></div>
-        <input type="text" id="challenge-input" class="challenge-input" placeholder="Type the phrase here..." autocomplete="off" spellcheck="false">
+        <input
+          type="text"
+          id="challenge-input"
+          class="challenge-input"
+          placeholder="Type the phrase here..."
+          autocomplete="off"
+          spellcheck="false"
+        />
         <div class="challenge-buttons">
-          <button id="challenge-cancel" class="challenge-btn cancel-btn">Go Back</button>
-          <button id="challenge-confirm" class="challenge-btn confirm-btn" disabled>Confirm</button>
+          <button id="challenge-cancel" class="challenge-btn cancel-btn">
+            Go Back
+          </button>
+          <button
+            id="challenge-confirm"
+            class="challenge-btn confirm-btn"
+            disabled
+          >
+            Confirm
+          </button>
         </div>
       </div>
     </div>

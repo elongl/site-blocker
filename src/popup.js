@@ -60,13 +60,17 @@ const renderBlockedList = async () => {
 };
 
 const renderTempUnblockedList = async () => {
-  const { temporarilyUnblocked } = await chrome.storage.local.get({ temporarilyUnblocked: [] });
+  const { temporarilyUnblocked } = await chrome.storage.local.get({
+    temporarilyUnblocked: [],
+  });
   const section = document.getElementById("temp-unblocked-section");
   const listElement = document.getElementById("temp-unblocked-list");
   listElement.innerHTML = "";
 
   const now = Date.now();
-  const activeUnblocks = temporarilyUnblocked.filter((entry) => entry.expiresAt > now);
+  const activeUnblocks = temporarilyUnblocked.filter(
+    (entry) => entry.expiresAt > now,
+  );
 
   if (activeUnblocks.length === 0) {
     section.style.display = "none";
@@ -94,9 +98,13 @@ const renderTempUnblockedList = async () => {
 
 const removeSite = async (host) => {
   let { blockedSites } = await chrome.storage.sync.get({ blockedSites: [] });
-  let { temporarilyUnblocked } = await chrome.storage.local.get({ temporarilyUnblocked: [] });
+  let { temporarilyUnblocked } = await chrome.storage.local.get({
+    temporarilyUnblocked: [],
+  });
   blockedSites = blockedSites.filter((site) => site.host !== host);
-  temporarilyUnblocked = temporarilyUnblocked.filter((entry) => entry.host !== host);
+  temporarilyUnblocked = temporarilyUnblocked.filter(
+    (entry) => entry.host !== host,
+  );
   await chrome.storage.sync.set({ blockedSites });
   await chrome.storage.local.set({ temporarilyUnblocked });
   reloadBlockedTabsForHost(host);
@@ -105,8 +113,12 @@ const removeSite = async (host) => {
 };
 
 const cancelTempUnblock = async (host) => {
-  let { temporarilyUnblocked } = await chrome.storage.local.get({ temporarilyUnblocked: [] });
-  temporarilyUnblocked = temporarilyUnblocked.filter((entry) => entry.host !== host);
+  let { temporarilyUnblocked } = await chrome.storage.local.get({
+    temporarilyUnblocked: [],
+  });
+  temporarilyUnblocked = temporarilyUnblocked.filter(
+    (entry) => entry.host !== host,
+  );
   await chrome.storage.local.set({ temporarilyUnblocked });
   renderTempUnblockedList();
 };
@@ -120,7 +132,9 @@ const blockSite = async () => {
   const blockSuccessLabel = document.getElementById("block-success");
   let { blockedSites } = await chrome.storage.sync.get({ blockedSites: [] });
 
-  const existingIndex = blockedSites.findIndex((site) => site.host === currentTabURL.host);
+  const existingIndex = blockedSites.findIndex(
+    (site) => site.host === currentTabURL.host,
+  );
   if (existingIndex !== -1) {
     blockedSites.splice(existingIndex, 1);
   }
@@ -130,7 +144,9 @@ const blockSite = async () => {
   blockSuccessLabel.style.display = "block";
   renderBlockedList();
   await chrome.tabs.update(currentTab.id, {
-    url: chrome.runtime.getURL(`static/blocked.html?url=${encodeURIComponent(currentTabURL.href)}`),
+    url: chrome.runtime.getURL(
+      `static/blocked.html?url=${encodeURIComponent(currentTabURL.href)}`,
+    ),
   });
 };
 

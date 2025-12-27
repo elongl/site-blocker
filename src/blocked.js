@@ -49,7 +49,7 @@ const checkIfStillBlocked = async () => {
     temporarilyUnblocked: [],
   });
   const tempEntry = temporarilyUnblocked.find(
-    (entry) => entry.host === blockedSiteURL.host
+    (entry) => entry.host === blockedSiteURL.host,
   );
   if (tempEntry && tempEntry.expiresAt > Date.now()) {
     window.location.href = blockedSiteURL.href;
@@ -88,7 +88,7 @@ const temporarilyUnblockSite = async () => {
     temporarilyUnblocked: [],
   });
   temporarilyUnblocked = temporarilyUnblocked.filter(
-    (entry) => entry.host !== blockedSiteURL.host
+    (entry) => entry.host !== blockedSiteURL.host,
   );
   temporarilyUnblocked = [
     ...temporarilyUnblocked,
@@ -114,7 +114,7 @@ const unblockSite = async () => {
   if (!blockedSiteURL) return;
   let { blockedSites } = await chrome.storage.sync.get({ blockedSites: [] });
   blockedSites = blockedSites.filter(
-    (site) => site.host !== blockedSiteURL.host
+    (site) => site.host !== blockedSiteURL.host,
   );
   await chrome.storage.sync.set({ blockedSites });
   const currentTab = await chrome.tabs.getCurrent();
@@ -123,23 +123,25 @@ const unblockSite = async () => {
 };
 
 const getRandomPhrase = () => {
-  return CHALLENGE_PHRASES[Math.floor(Math.random() * CHALLENGE_PHRASES.length)];
+  return CHALLENGE_PHRASES[
+    Math.floor(Math.random() * CHALLENGE_PHRASES.length)
+  ];
 };
 
 const showChallenge = (action) => {
   pendingAction = action;
   currentChallenge = getRandomPhrase();
-  
+
   const overlay = document.getElementById("challenge-overlay");
   const phraseEl = document.getElementById("challenge-phrase");
   const inputEl = document.getElementById("challenge-input");
   const confirmBtn = document.getElementById("challenge-confirm");
-  
+
   phraseEl.textContent = currentChallenge;
   inputEl.value = "";
   confirmBtn.disabled = true;
   inputEl.classList.remove("error");
-  
+
   overlay.classList.add("visible");
   setTimeout(() => inputEl.focus(), 100);
 };
@@ -153,7 +155,8 @@ const hideChallenge = () => {
 const validateChallenge = () => {
   const inputEl = document.getElementById("challenge-input");
   const confirmBtn = document.getElementById("challenge-confirm");
-  const isMatch = inputEl.value.toLowerCase().trim() === currentChallenge.toLowerCase();
+  const isMatch =
+    inputEl.value.toLowerCase().trim() === currentChallenge.toLowerCase();
   confirmBtn.disabled = !isMatch;
 };
 
@@ -164,7 +167,7 @@ const confirmChallenge = () => {
     setTimeout(() => inputEl.classList.remove("error"), 400);
     return;
   }
-  
+
   hideChallenge();
   if (pendingAction) pendingAction();
 };
@@ -172,18 +175,32 @@ const confirmChallenge = () => {
 displayBlockedSite();
 setupDurationButtons();
 
-document.getElementById("temp-unblock-button").addEventListener("click", () => showChallenge(temporarilyUnblockSite));
-document.getElementById("unblock-once-button").addEventListener("click", () => showChallenge(unblockSiteOnce));
-document.getElementById("unblock-button").addEventListener("click", () => showChallenge(unblockSite));
+document
+  .getElementById("temp-unblock-button")
+  .addEventListener("click", () => showChallenge(temporarilyUnblockSite));
+document
+  .getElementById("unblock-once-button")
+  .addEventListener("click", () => showChallenge(unblockSiteOnce));
+document
+  .getElementById("unblock-button")
+  .addEventListener("click", () => showChallenge(unblockSite));
 
-document.getElementById("challenge-cancel").addEventListener("click", hideChallenge);
-document.getElementById("challenge-confirm").addEventListener("click", confirmChallenge);
-document.getElementById("challenge-input").addEventListener("input", validateChallenge);
+document
+  .getElementById("challenge-cancel")
+  .addEventListener("click", hideChallenge);
+document
+  .getElementById("challenge-confirm")
+  .addEventListener("click", confirmChallenge);
+document
+  .getElementById("challenge-input")
+  .addEventListener("input", validateChallenge);
 document.getElementById("challenge-input").addEventListener("keydown", (e) => {
   if (e.key === "Enter") confirmChallenge();
   if (e.key === "Escape") hideChallenge();
 });
-document.getElementById("challenge-input").addEventListener("paste", (e) => e.preventDefault());
+document
+  .getElementById("challenge-input")
+  .addEventListener("paste", (e) => e.preventDefault());
 document.getElementById("challenge-overlay").addEventListener("click", (e) => {
   if (e.target === e.currentTarget) hideChallenge();
 });
