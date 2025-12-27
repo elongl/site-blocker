@@ -32,6 +32,17 @@ const reloadOtherBlockedTabsForHost = async (host, excludeTabId) => {
 const blockedSiteURL = getBlockedSiteURL();
 let selectedMinutes = 30;
 
+const CHALLENGE_PHRASES = [
+  "I am wasting my time",
+  "I should be working",
+  "This is a distraction",
+  "I will regret this",
+  "Back to procrastinating",
+];
+
+let currentChallenge = null;
+let pendingAction = null;
+
 const checkIfStillBlocked = async () => {
   if (!blockedSiteURL) return;
   const { temporarilyUnblocked } = await chrome.storage.local.get({
@@ -111,14 +122,68 @@ const unblockSite = async () => {
   window.location.href = blockedSiteURL.href;
 };
 
+const getRandomPhrase = () => {
+  return CHALLENGE_PHRASES[Math.floor(Math.random() * CHALLENGE_PHRASES.length)];
+};
+
+const showChallenge = (action) => {
+  pendingAction = action;
+  currentChallenge = getRandomPhrase();
+  
+  const overlay = document.getElementById("challenge-overlay");
+  const phraseEl = document.getElementById("challenge-phrase");
+  const inputEl = document.getElementById("challenge-input");
+  const confirmBtn = document.getElementById("challenge-confirm");
+  
+  phraseEl.textContent = currentChallenge;
+  inputEl.value = "";
+  confirmBtn.disabled = true;
+  inputEl.classList.remove("error");
+  
+  overlay.classList.add("visible");
+  setTimeout(() => inputEl.focus(), 100);
+};
+
+const hideChallenge = () => {
+  document.getElementById("challenge-overlay").classList.remove("visible");
+  pendingAction = null;
+  currentChallenge = null;
+};
+
+const validateChallenge = () => {
+  const inputEl = document.getElementById("challenge-input");
+  const confirmBtn = document.getElementById("challenge-confirm");
+  const isMatch = inputEl.value.toLowerCase().trim() === currentChallenge.toLowerCase();
+  confirmBtn.disabled = !isMatch;
+};
+
+const confirmChallenge = () => {
+  const inputEl = document.getElementById("challenge-input");
+  if (inputEl.value.toLowerCase().trim() !== currentChallenge.toLowerCase()) {
+    inputEl.classList.add("error");
+    setTimeout(() => inputEl.classList.remove("error"), 400);
+    return;
+  }
+  
+  hideChallenge();
+  if (pendingAction) pendingAction();
+};
+
 displayBlockedSite();
 setupDurationButtons();
-document
-  .getElementById("temp-unblock-button")
-  .addEventListener("click", temporarilyUnblockSite);
-document
-  .getElementById("unblock-once-button")
-  .addEventListener("click", unblockSiteOnce);
-document
-  .getElementById("unblock-button")
-  .addEventListener("click", unblockSite);
+
+document.getElementById("temp-unblock-button").addEventListener("click", () => showChallenge(temporarilyUnblockSite));
+document.getElementById("unblock-once-button").addEventListener("click", () => showChallenge(unblockSiteOnce));
+document.getElementById("unblock-button").addEventListener("click", () => showChallenge(unblockSite));
+
+document.getElementById("challenge-cancel").addEventListener("click", hideChallenge);
+document.getElementById("challenge-confirm").addEventListener("click", confirmChallenge);
+document.getElementById("challenge-input").addEventListener("input", validateChallenge);
+document.getElementById("challenge-input").addEventListener("keydown", (e) => {
+  if (e.key === "Enter") confirmChallenge();
+  if (e.key === "Escape") hideChallenge();
+});
+document.getElementById("challenge-input").addEventListener("paste", (e) => e.preventDefault());
+document.getElementById("challenge-overlay").addEventListener("click", (e) => {
+  if (e.target === e.currentTarget) hideChallenge();
+});

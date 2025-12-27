@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta charset="UTF-8">
     <style>
       * {
         box-sizing: border-box;
@@ -127,6 +128,130 @@
         opacity: 0.4;
         cursor: not-allowed;
       }
+      .challenge-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.75);
+        backdrop-filter: blur(4px);
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+      }
+      .challenge-overlay.visible {
+        display: flex;
+      }
+      .challenge-modal {
+        background: linear-gradient(145deg, #1e1e3a 0%, #2a2a4a 100%);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 20px;
+        padding: 36px 40px;
+        max-width: 400px;
+        width: 90%;
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+        animation: modalSlideIn 0.3s ease-out;
+      }
+      @keyframes modalSlideIn {
+        from {
+          opacity: 0;
+          transform: translateY(-20px) scale(0.95);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+      .challenge-header {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+      .challenge-icon {
+        font-size: 2.5rem;
+        display: block;
+        margin-bottom: 12px;
+      }
+      .challenge-header h2 {
+        font-size: 1.4rem;
+        font-weight: 600;
+        color: #ff6b6b;
+      }
+      .challenge-text {
+        text-align: center;
+        color: #a0a0a0;
+        font-size: 0.95rem;
+        margin-bottom: 16px;
+      }
+      .challenge-phrase {
+        background: rgba(0, 0, 0, 0.3);
+        border: 1px dashed rgba(255, 107, 107, 0.4);
+        border-radius: 10px;
+        padding: 14px 18px;
+        text-align: center;
+        font-family: "SF Mono", "Fira Code", monospace;
+        font-size: 1rem;
+        color: #ff6b6b;
+        letter-spacing: 0.5px;
+        margin-bottom: 16px;
+        user-select: none;
+      }
+      .challenge-input {
+        width: 100%;
+        background: rgba(255, 255, 255, 0.08);
+        border: 2px solid rgba(255, 255, 255, 0.15);
+        border-radius: 10px;
+        padding: 14px 16px;
+        font-family: "SF Mono", "Fira Code", monospace;
+        font-size: 1rem;
+        color: #e8e8e8;
+        text-align: center;
+        transition: border-color 0.2s;
+        margin-bottom: 20px;
+      }
+      .challenge-input:focus {
+        outline: none;
+        border-color: #4ecdc4;
+      }
+      .challenge-input.error {
+        border-color: #ff6b6b;
+        animation: shake 0.4s ease-out;
+      }
+      @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        20%, 60% { transform: translateX(-6px); }
+        40%, 80% { transform: translateX(6px); }
+      }
+      .challenge-buttons {
+        display: flex;
+        gap: 12px;
+      }
+      .challenge-btn {
+        flex: 1;
+        padding: 12px 20px;
+        border-radius: 10px;
+        font-size: 0.95rem;
+        font-weight: 500;
+        border: none;
+      }
+      .cancel-btn {
+        background: rgba(255, 255, 255, 0.1);
+        color: #a0a0a0;
+      }
+      .cancel-btn:hover {
+        background: rgba(255, 255, 255, 0.15);
+        color: #e8e8e8;
+      }
+      .confirm-btn {
+        background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
+        color: #1a1a2e;
+      }
+      .confirm-btn:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+      }
+      .confirm-btn:not(:disabled):hover {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 15px rgba(78, 205, 196, 0.3);
+      }
     </style>
   </head>
   <body>
@@ -152,6 +277,23 @@
         </div>
       </div>
     </div>
+
+    <div id="challenge-overlay" class="challenge-overlay">
+      <div class="challenge-modal">
+        <div class="challenge-header">
+          <span class="challenge-icon">⚠️</span>
+          <h2>Are you sure?</h2>
+        </div>
+        <p class="challenge-text">To proceed, type the phrase below:</p>
+        <div class="challenge-phrase" id="challenge-phrase"></div>
+        <input type="text" id="challenge-input" class="challenge-input" placeholder="Type the phrase here..." autocomplete="off" spellcheck="false">
+        <div class="challenge-buttons">
+          <button id="challenge-cancel" class="challenge-btn cancel-btn">Go Back</button>
+          <button id="challenge-confirm" class="challenge-btn confirm-btn" disabled>Confirm</button>
+        </div>
+      </div>
+    </div>
+
     <script src="/src/blocked.js"></script>
   </body>
 </html>
