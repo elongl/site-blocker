@@ -168,8 +168,9 @@ const confirmChallenge = () => {
     return;
   }
 
+  const action = pendingAction;
   hideChallenge();
-  if (pendingAction) pendingAction();
+  if (action) action();
 };
 
 displayBlockedSite();
@@ -201,6 +202,9 @@ document.getElementById("challenge-input").addEventListener("keydown", (e) => {
 document
   .getElementById("challenge-input")
   .addEventListener("paste", (e) => e.preventDefault());
+document
+  .getElementById("challenge-input")
+  .addEventListener("drop", (e) => e.preventDefault());
 document.getElementById("challenge-overlay").addEventListener("click", (e) => {
   if (e.target === e.currentTarget) hideChallenge();
 });
