@@ -11,6 +11,52 @@ const getBlockedSiteURL = () => {
   }
 };
 
+const blockedSiteURL = getBlockedSiteURL();
+
+const getStats = async () => {
+  const { blockStats } = await chrome.storage.local.get({
+    blockStats: { shown: 0, unblocked: 0 },
+  });
+  return blockStats;
+};
+
+const recordShown = async () => {
+  const stats = await getStats();
+  stats.shown++;
+  await chrome.storage.local.set({ blockStats: stats });
+  renderStats();
+};
+
+const recordUnblocked = async () => {
+  const stats = await getStats();
+  stats.unblocked++;
+  await chrome.storage.local.set({ blockStats: stats });
+};
+
+const resetStats = async () => {
+  await chrome.storage.local.set({ blockStats: { shown: 0, unblocked: 0 } });
+  renderStats();
+};
+
+const renderStats = async () => {
+  const stats = await getStats();
+  const pastShown = blockedSiteURL ? stats.shown - 1 : stats.shown;
+  const resisted = Math.max(0, pastShown - stats.unblocked);
+  const unblockedPercent = pastShown > 0 ? (stats.unblocked / pastShown) * 100 : 0;
+
+  document.getElementById("stat-resisted").textContent = resisted;
+  document.getElementById("stat-unblocked").textContent = stats.unblocked;
+
+  const percentEl = document.getElementById("stat-percent");
+  percentEl.textContent = `${unblockedPercent.toFixed(1)}%`;
+  percentEl.className = "stat-percent";
+  if (unblockedPercent > 50) {
+    percentEl.classList.add("high");
+  } else if (unblockedPercent < 10) {
+    percentEl.classList.add("low");
+  }
+};
+
 const reloadOtherBlockedTabsForHost = async (host, excludeTabId) => {
   const blockedPageBase = chrome.runtime.getURL("static/blocked.html");
   const tabs = await chrome.tabs.query({ url: blockedPageBase + "*" });
@@ -29,7 +75,6 @@ const reloadOtherBlockedTabsForHost = async (host, excludeTabId) => {
   }
 };
 
-const blockedSiteURL = getBlockedSiteURL();
 let selectedMinutes = 30;
 
 const CHALLENGE_PHRASES = [
@@ -83,6 +128,7 @@ const setupDurationButtons = () => {
 
 const temporarilyUnblockSite = async () => {
   if (!blockedSiteURL) return;
+  await recordUnblocked();
   const expiresAt = Date.now() + selectedMinutes * 60 * 1000;
   let { temporarilyUnblocked } = await chrome.storage.local.get({
     temporarilyUnblocked: [],
@@ -102,6 +148,7 @@ const temporarilyUnblockSite = async () => {
 
 const unblockSiteOnce = async () => {
   if (!blockedSiteURL) return;
+  await recordUnblocked();
   let { oneTimeUnblocked } = await chrome.storage.local.get({
     oneTimeUnblocked: [],
   });
@@ -112,6 +159,7 @@ const unblockSiteOnce = async () => {
 
 const unblockSite = async () => {
   if (!blockedSiteURL) return;
+  await recordUnblocked();
   let { blockedSites } = await chrome.storage.sync.get({ blockedSites: [] });
   blockedSites = blockedSites.filter(
     (site) => site.host !== blockedSiteURL.host,
@@ -178,6 +226,13 @@ const confirmChallenge = () => {
 
 displayBlockedSite();
 setupDurationButtons();
+renderStats();
+
+if (blockedSiteURL) {
+  recordShown();
+}
+
+document.getElementById("reset-stats-button").addEventListener("click", resetStats);
 
 document
   .getElementById("temp-unblock-button")
